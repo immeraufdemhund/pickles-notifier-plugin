@@ -1,0 +1,15 @@
+<div>
+    <p>
+        Path to the XML results file. The filename itself can be a wildcard as defined by the searchpattern of the .NET Directory.GetFiles() method.<br/>
+
+        For selecting multiple resultsfiles to be processed, you can use the wildcard searchpattern, you can enter the files as a semicolon separated list or a combination of both. Selecting only a path to a folder will not work, when all files in a folder needs to be selected, append a * to the path.<br/>
+        Runs from %WORKSPACE% by default so is not needed.
+    </p>
+    <ul>
+        <li>ImportantProject.AcceptanceTests\*</li>
+        <li>.\*</li>
+        <li>C:\MyProject\Reports\results.xml</li>
+        <li>C:\MyProject\Reports\*.xml</li>
+        <li>C:\MyProject\Reports\*.xml;C:\MyProject\SystemTest\*</li>
+    </ul>
+</div>

@@ -1,4 +1,64 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core"
          xmlns:f="/lib/form">
+    <f:entry title="Pickles Version" field="picklesInstallationName">
+        <select name="picklesNotifier.picklesInstallationName">
+            <j:forEach var="inst" items="${descriptor.installations}">
+                <f:option selected="${inst.name==instance.picklesInstallationName}">${inst.name}</f:option>
+            </j:forEach>
+        </select>
+    </f:entry>
+
+    <f:entry title="Feature file directory" field="featureDirectory">
+        <f:textbox default="Path_of_acceptance_tests"/>
+    </f:entry>
+
+    <f:entry title="Output directory" field="outputDirectory" description="The default value if omitted is the current folder; which is the workspace">
+        <f:textbox default="\\some-server\c$\Features\NAME_OF_PROJECT"/>
+    </f:entry>
+
+    <f:entry title="Test results file(s)" field="linkResultsFiles">
+        <f:textbox default="nunit-test-results\__AcceptanceTestProject__.xml"/>
+    </f:entry>
+
+    <f:entry title="System Under Test Name" field="systemUnderTestName">
+        <f:textbox default="%JOB_NAME%"/>
+    </f:entry>
+
+    <f:entry title="System Under Test Version" field="systemUnderTestVersion">
+        <f:textbox default="Build #%BUILD_NUMBER%"/>
+    </f:entry>
+
+    <f:advanced>
+        <f:entry title="Documentation Format" field="documentationFormat">
+            <select name="picklesNotifier.documentationFormat">
+                <f:option selected='${instance.documentationFormat=="dhtml"}'>dhtml</f:option>
+                <f:option selected='${instance.documentationFormat=="html"}'>html</f:option>
+                <f:option selected='${instance.documentationFormat=="excel"}'>excel</f:option>
+                <f:option selected='${instance.documentationFormat=="json"}'>json</f:option>
+                <f:option selected='${instance.documentationFormat=="word"}'>word</f:option>
+                <f:option selected='${instance.documentationFormat=="cucumber"}'>cucumber</f:option>
+            </select>
+        </f:entry>
+
+        <f:entry title="Test results format" field="testResultFormat">
+            <select name="picklesNotifier.testResultFormat">
+                <f:option selected='${instance.testResultFormat=="nunit"}'>nunit</f:option>
+                <f:option selected='${instance.testResultFormat=="nunit3"}'>nunit3</f:option>
+                <f:option selected='${instance.testResultFormat=="xunit"}'>xunit</f:option>
+                <f:option selected='${instance.testResultFormat=="xunit2"}'>xunit2</f:option>
+                <f:option selected='${instance.testResultFormat=="mstest"}'>mstest</f:option>
+                <f:option selected='${instance.testResultFormat=="cucumberjson"}'>cucumberjson</f:option>
+                <f:option selected='${instance.testResultFormat=="specrun"}'>specrun</f:option>
+                <f:option selected='${instance.testResultFormat=="vstest"}'>vstest</f:option>
+            </select>
+        </f:entry>
+
+        <f:entry title="Include experimental features" field="includeExperimentalFeatures" description="If checked this tells pickles to use experimental features. This can change version to version and is not well documented.">
+            <f:checkbox default="false"/>
+        </f:entry>
+        <f:entry title="Enable Comments" field="enableComments" description="If checked Pickles version 2.7+ will includes Gherkin #-style comments.">
+            <f:checkbox default="true"/>
+        </f:entry>
+    </f:advanced>
 </j:jelly>
