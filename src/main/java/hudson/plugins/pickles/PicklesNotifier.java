@@ -2,17 +2,22 @@ package hudson.plugins.pickles;
 /**
  * Created by User on 2/23/2017.
  */
+
 import hudson.CopyOnWrite;
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
+import hudson.plugins.pickles.utilities.BuildPicklesArguments;
+import hudson.plugins.pickles.utilities.FindPicklesInstallation;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
 import hudson.tools.ToolInstallation;
+import hudson.util.ArgumentListBuilder;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
@@ -65,6 +70,31 @@ public class PicklesNotifier extends Notifier {
 
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
+        ArgumentListBuilder args = new ArgumentListBuilder();
+
+        EnvVars env = build.getEnvironment(listener);
+        env.putAll(build.getBuildVariables());
+
+        FindPicklesInstallation findPicklesInstallation = new FindPicklesInstallation(this, build, launcher, listener);
+        BuildPicklesArguments buildPicklesArguments = new BuildPicklesArguments(this, env);
+
+        if(!findPicklesInstallation.addToArgumentList(args))
+            return false;
+
+        buildPicklesArguments.buildArguments(args);
+
+        if(!launcher.isUnix())
+            args = args.toWindowsCommand();
+
+        int errorCode = launcher.decorateFor(build.getBuiltOn()).launch()
+                .cmds(args)
+                .envs(env)
+                .stdout(listener)
+                .pwd(build.getModuleRoot())
+                .join();
+        if(errorCode != 0){
+            listener.error("[pickles] Pickles did not successfully complete. Error Code:" + errorCode);
+        }
         return super.perform(build, launcher, listener);
     }
 

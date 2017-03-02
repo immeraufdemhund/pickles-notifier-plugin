@@ -65,6 +65,5 @@ public final class PicklesToolInstallation extends ToolInstallation  implements 
             }
             return descriptor;
         }
-
     }
 }
