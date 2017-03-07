@@ -95,7 +95,7 @@ public class PicklesNotifier extends Notifier {
         if(errorCode != 0){
             listener.error("[pickles] Pickles did not successfully complete. Error Code:" + errorCode);
         }
-        return super.perform(build, launcher, listener);
+        return true;
     }
 
     @Extension @Symbol("pickles")
