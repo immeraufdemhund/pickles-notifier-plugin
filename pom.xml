@@ -6,7 +6,7 @@
 
     <groupId>com.robertsnyder.pickles</groupId>
     <artifactId>pickles-notifier</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>hpi</packaging>
 
     <parent>
