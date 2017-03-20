@@ -10,6 +10,7 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
+import hudson.model.Result;
 import hudson.plugins.pickles.utilities.BuildPicklesArguments;
 import hudson.plugins.pickles.utilities.FindPicklesInstallation;
 import hudson.tasks.BuildStepDescriptor;
@@ -70,8 +71,13 @@ public class PicklesNotifier extends Notifier {
 
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
-        ArgumentListBuilder args = new ArgumentListBuilder();
+        Result result = build.getResult();
+        if(result == Result.ABORTED || result == Result.FAILURE){
+            listener.getLogger().println("[pickles] Build is Aborted or Failed, skipping pickles generation");
+            return true;
+        }
 
+        ArgumentListBuilder args = new ArgumentListBuilder();
         EnvVars env = build.getEnvironment(listener);
         env.putAll(build.getBuildVariables());
 
